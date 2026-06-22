@@ -32,7 +32,27 @@ http://127.0.0.1:3000/
 
 ## 部署建议
 
-推荐部署到 Vercel、Node 服务或支持 Next.js 的平台，例如：
+推荐使用 Cloudflare Workers + OpenNext 部署，便于后续扩展 API、动态分享图、埋点或后台配置。
+
+本地按 Cloudflare Workers 运行时预览：
+
+```bash
+npm run cf:preview
+```
+
+部署到 Cloudflare Workers：
+
+```bash
+npm run cf:deploy
+```
+
+首次部署前请先登录 Cloudflare：
+
+```bash
+npx wrangler login
+```
+
+部署后的路径可以配置为：
 
 ```text
 https://你的域名/h5/workplace-test/
