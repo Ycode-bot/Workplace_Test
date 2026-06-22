@@ -2,10 +2,17 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "workplace-test",
   "main": ".open-next/worker.js",
+  "workers_dev": true,
   "compatibility_date": "2026-06-22",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "workplace.grainbuds.online",
+      "custom_domain": true
+    }
+  ]
 }
