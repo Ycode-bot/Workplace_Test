@@ -142,6 +142,15 @@ h1 {
   transform: rotate(-2deg);
 }
 
+.mascot-image {
+  position: relative;
+  z-index: 1;
+  width: min(82%, 260px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 0 rgba(33, 27, 24, 0.08));
+}
+
 .badge-card {
   position: absolute;
   right: 18px;
@@ -153,149 +162,6 @@ h1 {
   box-shadow: 4px 4px 0 var(--line);
   font-size: 13px;
   font-weight: 900;
-}
-
-.mascot {
-  position: relative;
-  width: 168px;
-  height: 214px;
-  border: 4px solid var(--line);
-  border-radius: 48% 48% 42% 42% / 38% 38% 52% 52%;
-  background: var(--oat);
-  box-shadow: inset -16px -18px 0 rgba(180, 122, 84, 0.1);
-  z-index: 1;
-}
-
-.ear,
-.hair,
-.face,
-.eye,
-.snout,
-.paw,
-.foot {
-  position: absolute;
-  display: block;
-}
-
-.ear {
-  top: 24px;
-  width: 32px;
-  height: 36px;
-  border: 4px solid var(--line);
-  border-radius: 50%;
-  background: var(--pink);
-  z-index: -1;
-}
-
-.ear-left {
-  left: -14px;
-}
-
-.ear-right {
-  right: -14px;
-}
-
-.hair {
-  top: -11px;
-  width: 28px;
-  height: 26px;
-  border-top: 4px solid var(--line);
-  border-radius: 50%;
-}
-
-.hair-a {
-  left: 54px;
-  transform: rotate(-20deg);
-}
-
-.hair-b {
-  left: 78px;
-  transform: rotate(18deg);
-}
-
-.eye {
-  top: 70px;
-  width: 18px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--line);
-}
-
-.eye-left {
-  left: 42px;
-}
-
-.eye-right {
-  right: 42px;
-}
-
-.snout {
-  left: 52px;
-  top: 88px;
-  width: 64px;
-  height: 72px;
-  border-radius: 48%;
-  background: var(--oat-deep);
-}
-
-.snout::before,
-.snout::after {
-  content: "";
-  position: absolute;
-  background: var(--line);
-}
-
-.snout::before {
-  left: 25px;
-  top: 23px;
-  width: 15px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.snout::after {
-  left: 31px;
-  top: 35px;
-  width: 3px;
-  height: 25px;
-  border-radius: 2px;
-}
-
-.paw {
-  top: 136px;
-  width: 28px;
-  height: 42px;
-  border: 3px solid var(--line);
-  border-top: 0;
-  border-radius: 0 0 18px 18px;
-  background: var(--oat-deep);
-}
-
-.paw-left {
-  left: 25px;
-  transform: rotate(18deg);
-}
-
-.paw-right {
-  right: 25px;
-  transform: rotate(-18deg);
-}
-
-.foot {
-  bottom: -8px;
-  width: 36px;
-  height: 24px;
-  border: 3px solid var(--line);
-  border-radius: 0 0 16px 16px;
-  background: var(--oat-deep);
-}
-
-.foot-left {
-  left: 34px;
-}
-
-.foot-right {
-  right: 34px;
 }
 
 .primary-button,

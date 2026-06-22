@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const mascotSrc = "/images/brand-mascot.png";
+
 const questions = [
   {
     kicker: "场景 01",
@@ -138,97 +140,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   if (line) ctx.fillText(line, x, y);
 }
 
-function drawCapybara(ctx, cx, cy, scale, accent) {
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.scale(scale, scale);
-  ctx.lineWidth = 7;
-  ctx.strokeStyle = "#211b18";
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-
-  ctx.fillStyle = "#f4cfa4";
-  drawRoundRect(ctx, -105, -150, 210, 280, 92);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "#f5a7a1";
-  ctx.beginPath();
-  ctx.arc(-82, -100, 26, 0, Math.PI * 2);
-  ctx.arc(82, -100, 26, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.strokeStyle = "#211b18";
-  ctx.beginPath();
-  ctx.arc(-28, -153, 20, Math.PI * 1.05, Math.PI * 1.85);
-  ctx.arc(0, -160, 22, Math.PI * 1.05, Math.PI * 1.85);
-  ctx.arc(30, -153, 20, Math.PI * 1.05, Math.PI * 1.85);
-  ctx.stroke();
-
-  ctx.fillStyle = "#211b18";
-  ctx.beginPath();
-  ctx.ellipse(-45, -62, 14, 7, 0, 0, Math.PI * 2);
-  ctx.ellipse(45, -62, 14, 7, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = "#b47a54";
-  ctx.beginPath();
-  ctx.ellipse(0, -18, 48, 58, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = "#211b18";
-  ctx.beginPath();
-  ctx.ellipse(-10, -42, 7, 4, 0, 0, Math.PI * 2);
-  ctx.ellipse(10, -42, 7, 4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(0, -34);
-  ctx.lineTo(0, 10);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(-14, 14);
-  ctx.quadraticCurveTo(0, 24, 14, 14);
-  ctx.stroke();
-
-  ctx.strokeStyle = "#e38f83";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.moveTo(-70, -30);
-  ctx.lineTo(-55, -24);
-  ctx.moveTo(55, -24);
-  ctx.lineTo(70, -30);
-  ctx.stroke();
-
-  ctx.strokeStyle = "#211b18";
-  ctx.lineWidth = 7;
-  ctx.fillStyle = "#b47a54";
-  drawRoundRect(ctx, -82, 28, 34, 72, 16);
-  ctx.fill();
-  ctx.stroke();
-  drawRoundRect(ctx, 48, 28, 34, 72, 16);
-  ctx.fill();
-  ctx.stroke();
-  drawRoundRect(ctx, -62, 118, 44, 34, 16);
-  ctx.fill();
-  ctx.stroke();
-  drawRoundRect(ctx, 18, 118, 44, 34, 16);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = accent;
-  drawRoundRect(ctx, -118, -190, 236, 48, 22);
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = "#211b18";
-  ctx.font = "900 25px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("今日精神状态", 0, -158);
-
-  ctx.restore();
-}
-
-function drawPoster(canvas, result) {
+function drawPoster(canvas, result, mascotImage) {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -271,7 +183,33 @@ function drawPoster(canvas, result) {
   ctx.font = "800 33px sans-serif";
   wrapText(ctx, result.desc, 132, 470, 630, 50);
 
-  drawCapybara(ctx, 450, 760, 1.35, result.accent);
+  ctx.save();
+  ctx.fillStyle = result.accent;
+  drawRoundRect(ctx, 291, 585, 318, 48, 22);
+  ctx.fill();
+  ctx.strokeStyle = "#211b18";
+  ctx.lineWidth = 5;
+  ctx.stroke();
+  ctx.fillStyle = "#211b18";
+  ctx.font = "900 25px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("今日精神状态", 450, 617);
+  ctx.restore();
+
+  if (mascotImage) {
+    ctx.save();
+    drawRoundRect(ctx, 210, 645, 480, 300, 38);
+    ctx.clip();
+    ctx.fillStyle = "#fffaf1";
+    ctx.fillRect(210, 645, 480, 300);
+    ctx.drawImage(mascotImage, 260, 642, 380, 380);
+    ctx.restore();
+
+    ctx.strokeStyle = "#211b18";
+    ctx.lineWidth = 5;
+    drawRoundRect(ctx, 210, 645, 480, 300, 38);
+    ctx.stroke();
+  }
 
   ctx.fillStyle = "#fffdf8";
   drawRoundRect(ctx, 148, 980, 604, 78, 28);
@@ -291,6 +229,7 @@ export default function WorkplaceTest() {
   const [current, setCurrent] = useState(0);
   const [scores, setScores] = useState(initialScores);
   const [resultKey, setResultKey] = useState("boot");
+  const [mascotImage, setMascotImage] = useState(null);
   const posterCanvasRef = useRef(null);
 
   const question = questions[current];
@@ -301,10 +240,16 @@ export default function WorkplaceTest() {
   }, [screen, current]);
 
   useEffect(() => {
+    const image = new Image();
+    image.onload = () => setMascotImage(image);
+    image.src = mascotSrc;
+  }, []);
+
+  useEffect(() => {
     if (screen === "result" && posterCanvasRef.current) {
-      drawPoster(posterCanvasRef.current, result);
+      drawPoster(posterCanvasRef.current, result, mascotImage);
     }
-  }, [screen, result]);
+  }, [screen, result, mascotImage]);
 
   function startQuiz() {
     setCurrent(0);
@@ -357,21 +302,7 @@ export default function WorkplaceTest() {
             <p className="hero-text">5 道题，看你今天是开机失败、背锅预警，还是等周末回血。</p>
           </div>
           <div className="mascot-card" aria-hidden="true">
-            <div className="mascot">
-              <span className="hair hair-a" />
-              <span className="hair hair-b" />
-              <span className="ear ear-left" />
-              <span className="ear ear-right" />
-              <span className="face">
-                <span className="eye eye-left" />
-                <span className="eye eye-right" />
-                <span className="snout" />
-              </span>
-              <span className="paw paw-left" />
-              <span className="paw paw-right" />
-              <span className="foot foot-left" />
-              <span className="foot foot-right" />
-            </div>
+            <img className="mascot-image" src={mascotSrc} alt="" />
             <div className="badge-card">今日状态待检测</div>
           </div>
         </div>
