@@ -145,8 +145,9 @@ h1 {
 .mascot-image {
   position: relative;
   z-index: 1;
-  width: min(82%, 260px);
-  aspect-ratio: 1;
+  width: auto;
+  max-width: 78%;
+  height: 248px;
   object-fit: contain;
   filter: drop-shadow(0 12px 0 rgba(33, 27, 24, 0.08));
 }

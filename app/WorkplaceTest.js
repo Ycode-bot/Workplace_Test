@@ -140,6 +140,15 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   if (line) ctx.fillText(line, x, y);
 }
 
+function drawImageContain(ctx, image, x, y, width, height) {
+  const ratio = Math.min(width / image.width, height / image.height);
+  const drawWidth = image.width * ratio;
+  const drawHeight = image.height * ratio;
+  const drawX = x + (width - drawWidth) / 2;
+  const drawY = y + (height - drawHeight) / 2;
+  ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+}
+
 function drawPoster(canvas, result, mascotImage) {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -202,7 +211,7 @@ function drawPoster(canvas, result, mascotImage) {
     ctx.clip();
     ctx.fillStyle = "#fffaf1";
     ctx.fillRect(210, 645, 480, 300);
-    ctx.drawImage(mascotImage, 260, 642, 380, 380);
+    drawImageContain(ctx, mascotImage, 260, 650, 380, 285);
     ctx.restore();
 
     ctx.strokeStyle = "#211b18";
