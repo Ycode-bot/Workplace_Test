@@ -1,11 +1,11 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "打工人精神状态测试",
-  description: "5道题测测你今天是哪种打工人精神状态，生成可保存分享海报。",
+  title: "职场人格抽样测试",
+  description: "随机5道职场吐槽题，测测你今天是哪种打工人格，生成可保存分享海报。",
   openGraph: {
-    title: "打工人精神状态测试",
-    description: "5道题测测你今天是哪种打工人精神状态，生成可保存分享海报。",
+    title: "职场人格抽样测试",
+    description: "随机5道职场吐槽题，测测你今天是哪种打工人格，生成可保存分享海报。",
     type: "website",
     locale: "zh_CN"
   }

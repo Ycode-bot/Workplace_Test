@@ -1,119 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { questionBank, resultOrder, results } from "./data/workplaceTestData";
 
 const mascotSrc = "/images/brand-mascot.png";
-
-const questions = [
-  {
-    kicker: "场景 01",
-    title: "周一早上刚坐下，有人问你进度，你第一反应是？",
-    options: [
-      { text: "先别问，我还在开机", type: "boot" },
-      { text: "截图留证，防止后面背锅", type: "shield" },
-      { text: "假装在找文件，争取一点缓冲", type: "fish" },
-      { text: "马上回，但心里已经扣一分", type: "salary" },
-      { text: "先已读，等脑子上线再回", type: "ghost" },
-      { text: "开始倒数离周末还有几天", type: "revive" }
-    ]
-  },
-  {
-    kicker: "场景 02",
-    title: "领导说“这个你看着推进一下”，你会？",
-    options: [
-      { text: "先问清楚标准，不然都是锅", type: "shield" },
-      { text: "表面收到，内心下线", type: "boot" },
-      { text: "开始算这点工资值不值", type: "salary" },
-      { text: "先去接杯水，启动摸鱼保护", type: "fish" },
-      { text: "看到消息，但先不让它看到我", type: "ghost" },
-      { text: "把它排进周五之后的人生", type: "revive" }
-    ]
-  },
-  {
-    kicker: "场景 03",
-    title: "同事突然说“帮我看一下”，你最怕什么？",
-    options: [
-      { text: "看着看着就变成我负责", type: "shield" },
-      { text: "我脑子还没加载完", type: "boot" },
-      { text: "这活不在我的工资范围内", type: "salary" },
-      { text: "我的摸鱼窗口被关闭", type: "fish" },
-      { text: "一回复就开启连环追问", type: "ghost" },
-      { text: "它影响我周末回血计划", type: "revive" }
-    ]
-  },
-  {
-    kicker: "场景 04",
-    title: "下班前十分钟又来新需求，你会？",
-    options: [
-      { text: "先保存聊天记录，明天再说", type: "shield" },
-      { text: "灵魂已经下班，无法受理", type: "boot" },
-      { text: "打开工资单冷静一下", type: "salary" },
-      { text: "把自己藏进外卖袋后面", type: "fish" },
-      { text: "已读，但给情绪留个缓冲区", type: "ghost" },
-      { text: "默念再忍一下，周末快到了", type: "revive" }
-    ]
-  },
-  {
-    kicker: "场景 05",
-    title: "如果给今天的你颁个奖，最像哪个？",
-    options: [
-      { text: "开机失败但坚持在岗奖", type: "boot" },
-      { text: "截图保命边界清晰奖", type: "shield" },
-      { text: "工资续命情绪稳定奖", type: "salary" },
-      { text: "带薪静音摸鱼自救奖", type: "fish" },
-      { text: "已读不回能量守恒奖", type: "ghost" },
-      { text: "周末复活再战江湖奖", type: "revive" }
-    ]
-  }
-];
-
-const results = {
-  boot: {
-    name: "周一开机失败型",
-    desc: "你不是不努力，只是系统启动比较慢。今天适合先活着，再谈效率。",
-    tags: ["人到魂未到", "加载中", "低电量上班"],
-    color: "#7aa9c6",
-    accent: "#ffd66b"
-  },
-  salary: {
-    name: "工资续命型",
-    desc: "你对工作没有失去热情，你只是清楚热情要按工资发放。",
-    tags: ["工资冷静器", "拒绝上头", "情绪记账"],
-    color: "#92b77b",
-    accent: "#ffd66b"
-  },
-  shield: {
-    name: "背锅预警型",
-    desc: "你已经进化出职场雷达。别人还在热血，你已经开始截图保命。",
-    tags: ["截图护身", "边界清醒", "锅来盾挡"],
-    color: "#f5a7a1",
-    accent: "#fff0a8"
-  },
-  fish: {
-    name: "摸鱼自救型",
-    desc: "你的摸鱼不是摆烂，是精神急救。懂得喘口气的人，才能活到下班。",
-    tags: ["带薪静音", "外卖袋掩护", "精神急救"],
-    color: "#c7b299",
-    accent: "#92b77b"
-  },
-  ghost: {
-    name: "已读不回防御型",
-    desc: "你不是冷漠，只是在给自己争取一点情绪缓存。回复可以晚点，边界必须在线。",
-    tags: ["消息缓冲", "边界自救", "低风险在线"],
-    color: "#b8a7d9",
-    accent: "#ffd66b"
-  },
-  revive: {
-    name: "周末复活型",
-    desc: "工作日的你像省电模式，周末才是真正开机。只要想到休息，血条还能再撑一格。",
-    tags: ["周末回血", "省电上班", "下班重生"],
-    color: "#88c9b7",
-    accent: "#fff0a8"
-  }
-};
-
-const resultOrder = ["boot", "shield", "salary", "fish", "ghost", "revive"];
+const quizSize = 5;
 const initialScores = () => Object.fromEntries(resultOrder.map((key) => [key, 0]));
+
+function pickRandomQuestions() {
+  const shuffled = [...questionBank];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled.slice(0, quizSize);
+}
 
 function drawRoundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
@@ -182,7 +83,7 @@ function drawPoster(canvas, result, mascotImage) {
   ctx.stroke();
   ctx.fillStyle = "#211b18";
   ctx.font = "900 22px sans-serif";
-  ctx.fillText("打工人精神状态测试", 154, 224);
+  ctx.fillText("职场人格抽样测试", 165, 224);
 
   ctx.fillStyle = "#211b18";
   ctx.font = "900 64px sans-serif";
@@ -236,8 +137,9 @@ function drawPoster(canvas, result, mascotImage) {
 export default function WorkplaceTest() {
   const [screen, setScreen] = useState("home");
   const [current, setCurrent] = useState(0);
+  const [questions, setQuestions] = useState(() => pickRandomQuestions());
   const [scores, setScores] = useState(initialScores);
-  const [resultKey, setResultKey] = useState("boot");
+  const [resultKey, setResultKey] = useState("silent");
   const [mascotImage, setMascotImage] = useState(null);
   const posterCanvasRef = useRef(null);
 
@@ -262,8 +164,9 @@ export default function WorkplaceTest() {
 
   function startQuiz() {
     setCurrent(0);
+    setQuestions(pickRandomQuestions());
     setScores(initialScores());
-    setResultKey("boot");
+    setResultKey("silent");
     setScreen("quiz");
   }
 
@@ -288,7 +191,7 @@ export default function WorkplaceTest() {
   function downloadPoster() {
     if (!posterCanvasRef.current) return;
     const link = document.createElement("a");
-    link.download = `打工人精神状态-${result.name}.png`;
+    link.download = `职场人格抽样测试-${result.name}.png`;
     link.href = posterCanvasRef.current.toDataURL("image/png");
     link.click();
   }
@@ -304,15 +207,15 @@ export default function WorkplaceTest() {
           <div className="hero-copy">
             <p className="eyebrow">Monday survival check</p>
             <h1>
-              打工人
+              职场人格
               <br />
-              精神状态测试
+              抽样测试
             </h1>
-            <p className="hero-text">5 道题，看你今天是开机失败、背锅预警，还是等周末回血。</p>
+            <p className="hero-text">随机 5 道职场吐槽题，看看你今天是哪种打工人格。</p>
           </div>
           <div className="mascot-card" aria-hidden="true">
             <img className="mascot-image" src={mascotSrc} alt="" />
-            <div className="badge-card">今日状态待检测</div>
+            <div className="badge-card">今日人格待抽样</div>
           </div>
         </div>
         <button className="primary-button" onClick={startQuiz} type="button">
@@ -326,19 +229,21 @@ export default function WorkplaceTest() {
           <button className="ghost-button" onClick={() => setScreen("home")} type="button">
             返回
           </button>
-          <div className="progress-text">{current + 1}/5</div>
+          <div className="progress-text">
+            {current + 1}/{quizSize}
+          </div>
         </div>
         <div className="progress-bar" aria-hidden="true">
-          <span style={{ width: `${((current + 1) / questions.length) * 100}%` }} />
+          <span style={{ width: `${((current + 1) / quizSize) * 100}%` }} />
         </div>
         <article className="question-card">
-          <p className="question-kicker">{question.kicker}</p>
+          <p className="question-kicker">职场切片 {String(current + 1).padStart(2, "0")}</p>
           <h2>{question.title}</h2>
           <div className="options">
             {question.options.map((option) => (
               <button
                 className="option-button"
-                key={`${question.kicker}-${option.type}`}
+                key={`${question.title}-${option.text}`}
                 onClick={() => chooseOption(option.type)}
                 type="button"
               >
